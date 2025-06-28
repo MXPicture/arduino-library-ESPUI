@@ -1134,7 +1134,7 @@ void ESPUIClass::begin(const char* _title, const char* username, const char* pas
 
     ui_title = _title;
 
-    server = new AsyncWebServer(port);
+    if (server == nullptr) server = new AsyncWebServer(port);
     ws = new AsyncWebSocket("/ws");
 
     ws->onEvent([](AsyncWebSocket* server, AsyncWebSocketClient* client, AwsEventType type, void* arg, uint8_t* data,
