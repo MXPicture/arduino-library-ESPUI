@@ -203,6 +203,11 @@ public:
 
     void updateVisibility(uint16_t id, bool visibility, int clientId = -1);
 
+    // Set optional user-defined JavaScript to be included in the UI.
+    // js: JavaScript code as a C-string. Must remain valid for the lifetime of the ESPUIClass instance.
+    // This is intentionally not a String to avoid dynamic memory allocation.
+    void setCustomJS(const char* js);
+
     // Variables
     const char* ui_title = "ESPUI"; // Store UI Title and Header Name
     Control* controls = nullptr;
@@ -251,6 +256,7 @@ public:
 
     AsyncWebServer* WebServer() {return server;}
     AsyncWebSocket* WebSocket() {return ws;}
+    size_t clientCount() const {return MapOfClients.size();}
 
 #if defined(ESP32)
 #   if (ESP_IDF_VERSION_MAJOR == 4 && ESP_IDF_VERSION_MINOR >= 4) || ESP_IDF_VERSION_MAJOR > 4
@@ -284,7 +290,6 @@ protected:
 
 #define ClientUpdateType_t ESPUIclient::ClientUpdateType_t
     void NotifyClients(ClientUpdateType_t newState);
-    void NotifyClient(uint32_t WsClientId, ClientUpdateType_t newState);
 
     bool SendJsonDocToWebSocket(ArduinoJson::JsonDocument& document, uint16_t clientId);
 
